@@ -1,6 +1,11 @@
-See http://habilis.net/cronic/. Keeping a copy safe for personal use.
+From http://habilis.net/cronic/.
 
-# Cronic
+# Cronify
+
+Cron complains when something goes wrong. Launchd quietly writes a complaint
+to syslog. This simple script lets you make LaunchAgents more like cron jobs.
+
+... evolved from Cronic, which...
 
 ## A cure for Cron's chronic email problem
 
