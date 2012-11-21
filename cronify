@@ -14,16 +14,11 @@ MSG=/tmp/cronify.msg.$$
 
 set +e
 "$@" >$OUT 2>$TRACE
-
-# remove local part of error message
-STR=`cat $TRACE`
-echo ${STR##*cronify: line [0-9][0-9]: } >$TRACE
-
 RESULT=$?
 set -e
 
-PATTERN="^${PS4:0:1}\\+${PS4:1}"
-if grep -aq "$PATTERN" $TRACE
+PATTERN="^\\${PS4:0:1}+${PS4:1}"
+if [ -s "$TRACE" ] && grep -aq "$PATTERN" $TRACE
 then
     ! grep -av "$PATTERN" $TRACE > $ERR
 else
@@ -33,6 +28,11 @@ cat $OUT
 
 if [ $RESULT -ne 0 -o -s "$ERR" ]
 then
+
+  # remove part of error message caused by this script
+  STR=`cat $TRACE`
+  echo ${STR##*cronify: line [0-9][0-9]: } >$TRACE
+
   cat $ERR >&2
   echo "Cronify detected failure or error output for the command:" > $MSG
   echo "$@" >> $MSG
